@@ -19,7 +19,3 @@ def main():
     file = open(path, "r")
     file_lst = file.read().splitlines()
     check(file_lst)
-
-
-if __name__ == "__main__":
-    main()
