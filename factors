@@ -1,0 +1,30 @@
+#!/usr/bin/python3
+
+
+import sys
+from math import sqrt
+
+
+def check(lst):
+    for i in range(len(lst)):
+        if (int(lst[i]) % 2 == 0):
+            print("{}={}*{}".format(int(lst[i]), int(int(lst[i])/2), "2"))
+            continue
+
+        sqn = int(sqrt(int(lst[i])))
+        if sqn % 2 == 0:
+            sqn += 1
+        for i in range(3, sqn + 1, 2):
+            if int(lst[i]) % i == 0:
+                print("{}*{}".format(i, lst//i))
+                break
+
+def main():
+    path = sys.argv[1]
+    file = open(path, "r")
+    file_lst = file.read().splitlines()
+    check(file_lst)
+
+
+if __name__ == "__main__":
+    main()
