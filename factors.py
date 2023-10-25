@@ -1,25 +1,57 @@
 #!/usr/bin/python3
 import sys
 
-
-def check(lst):
-    for i in range(len(lst)):
-        if (int(lst[i]) % 2 == 0):
-            print("{}={}*{}".format(int(lst[i]), int(int(lst[i])/2), "2"))
-        elif (int(lst[i]) % 3 == 0):
-            print("{}={}*{}".format(int(lst[i]), int(int(lst[i])/3), "3"))
-        elif (int(lst[i]) % 5 == 0):
-            print("{}={}*{}".format(int(lst[i]), int(int(lst[i])/5), "5"))
-        elif (int(lst[i]) % 7 == 0):
-            print("{}={}*{}".format(int(lst[i]), int(int(lst[i])/7), "7"))
+from resource import getrusage as resource_usage, RUSAGE_SELF
+from time import time as timestamp
 
 
-def main():
-    path = sys.argv[1]
-    file = open(path, "r")
-    file_lst = file.read().splitlines()
-    check(file_lst)
+def unix_time(function):
+    '''Return `real`, `sys` and `user` elapsed time, like UNIX's command `time`
+    You can calculate the amount of used CPU-time used by your
+    function/callable by summing `user` and `sys`. `real` is just like the wall
+    clock.
+    Note that `sys` and `user`'s resolutions are limited by the resolution of
+    the operating system's software clock (check `man 7 time` for more
+    details).
+    '''
+    start_time, start_resources = timestamp(), resource_usage(RUSAGE_SELF)
+    function()
+    end_resources, end_time = resource_usage(RUSAGE_SELF), timestamp()
+
+    return "\nreal: {}\nuser: {}\nsys: {}\n".format(
+        end_time - start_time,
+        end_resources.ru_utime - start_resources.ru_utime,
+        end_resources.ru_stime - start_resources.ru_stime)
 
 
-if __name__ == "__main__":
-    main()
+def trial_division(n: int) -> int:
+    """
+    Finds the smallest divisor, if any, of a given number `n`
+    Returns:
+        smallest divisor if found
+        0 if n is prime
+    """
+    # TODO: Create a C library with this function to speed it up
+    while n % 2 == 0:
+        return 2
+
+    f = 3
+    while f * f <= n:
+        if n % f == 0:
+            return f
+        else:
+            f += 2
+    # n is prime
+    return 1
+
+
+def print_factors():
+
+    with open(sys.argv[1], 'r') as prime:
+        line = prime.readline()
+        while line != '':
+            n = int(line)
+            rep = trial_division(n)
+            print("{}={}*{}".format(n, n//rep, rep))
+
+            line = prime.readline()
