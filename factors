@@ -1,23 +1,18 @@
 #!/usr/bin/python3
-
-
 import sys
-from math import sqrt
 
 
 def check(lst):
     for i in range(len(lst)):
         if (int(lst[i]) % 2 == 0):
             print("{}={}*{}".format(int(lst[i]), int(int(lst[i])/2), "2"))
-            continue
+        elif (int(lst[i]) % 3 == 0):
+            print("{}={}*{}".format(int(lst[i]), int(int(lst[i])/3), "3"))
+        elif (int(lst[i]) % 5 == 0):
+            print("{}={}*{}".format(int(lst[i]), int(int(lst[i])/5), "5"))
+        elif (int(lst[i]) % 7 == 0):
+            print("{}={}*{}".format(int(lst[i]), int(int(lst[i])/7), "7"))
 
-        sqn = int(sqrt(int(lst[i])))
-        if sqn % 2 == 0:
-            sqn += 1
-        for i in range(3, sqn + 1, 2):
-            if int(lst[i]) % i == 0:
-                print("{}*{}".format(i, lst//i))
-                break
 
 def main():
     path = sys.argv[1]
